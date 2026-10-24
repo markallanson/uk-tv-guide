@@ -660,8 +660,9 @@ main { position: relative; flex: 1; min-height: 0; }
 /* ------------------------------------------------------------ statusbar */
 
 .statusbar {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
   gap: 12px;
   padding: 5px 14px;
   font-size: 12px;
@@ -670,7 +671,11 @@ main { position: relative; flex: 1; min-height: 0; }
   border-top: 1px solid var(--border);
   z-index: 30;
 }
-.keys-hint { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.statusbar > * { min-width: 0; }
+#statusText { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.data-credit { color: var(--text-dim); text-decoration: none; }
+.data-credit:hover { color: var(--text); text-decoration: underline; }
+.keys-hint { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; justify-self: end; }
 
 /* -------------------------------------------------------------- loading */
 
