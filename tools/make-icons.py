@@ -1,53 +1,83 @@
 #!/usr/bin/env python3
-"""Regenerate PWA / home-screen icons: 📺 on the app's theme colour.
+"""Regenerate PWA / home-screen icons.
 
-Pillow is used because Noto Color Emoji is a bitmap (CBDT) font with a single
-109px strike — SVG rasterisers (librsvg/cairo) render it as solid black tofu.
-The glyph is upscaled with Lanczos from the bitmap strike.
+Motif: a TV screen with two programme bars and the app's signature red
+"now line" overshooting the screen — the guide's core visual, drawn with
+plain Pillow shapes (no emoji font dependency).
 
 Run:  python3 tools/make-icons.py     (writes ./icons/*.png)
 """
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw
 
-BG = (15, 18, 22, 255)  # #0f1216 — <meta name="theme-color"> / --bg
-EMOJI = "\U0001F4FA"  # 📺
-FONT_PATH = "/usr/share/fonts/noto/NotoColorEmoji.ttf"
-FONT_SIZE = 109  # NotoColorEmoji ships exactly one bitmap strike
+# palette (css/style.css)
+BG = (14, 17, 22, 255)        # --bg        #0e1116
+SCREEN = (30, 37, 45, 255)    # slate panel
+SCREEN_EDGE = (71, 81, 94, 255)
+BAR = (51, 61, 75, 255)       # programme blocks
+BAR_DIM = (42, 50, 62, 255)
+RED = (255, 77, 94, 255)      # --accent    #ff4d5e (now line)
+STAND = (71, 81, 94, 255)
 
 OUT = Path(__file__).resolve().parent.parent / "icons"
+SS = 2  # supersampling factor for smooth edges
 
 
-def glyph(px: int) -> Image.Image:
-    """The emoji at `px` square, transparent background."""
-    base = 128
-    img = Image.new("RGBA", (base, base), (0, 0, 0, 0))
-    ImageDraw.Draw(img).text(
-        (base / 2, base / 2), EMOJI,
-        font=ImageFont.truetype(FONT_PATH, FONT_SIZE),
-        embedded_color=True, anchor="mm",
-    )
-    return img.resize((px, px), Image.LANCZOS)
+def draw_master(px: int, glyph: float = 1.0) -> Image.Image:
+    """The icon composition at `px` square, full-bleed background.
 
+    `glyph` scales the composition around the centre — maskable icons need
+    everything inside the central 80% circle (glyph=0.85).
+    """
+    s = px / 1024 * glyph  # design grid is 1024
+    c = px * (1 - glyph) / 2  # re-centre scaled composition
 
-def icon(px: int, name: str, *, radius: float = 0.19, glyph_pct: float = 0.58,
-         full_bleed: bool = False) -> None:
-    img = Image.new("RGBA", (px, px), (0, 0, 0, 0))
+    def r(*vals):  # scale design coords
+        return [int(round(v * s + c)) for v in vals]
+
+    img = Image.new("RGBA", (px, px), BG)
     d = ImageDraw.Draw(img)
-    if full_bleed:
-        d.rectangle([0, 0, px - 1, px - 1], fill=BG)  # maskable/apple: edge-to-edge
-    else:
-        d.rounded_rectangle([0, 0, px - 1, px - 1], radius=int(px * radius), fill=BG)
-    g = glyph(int(px * glyph_pct))
-    img.alpha_composite(g, ((px - g.width) // 2, (px - g.height) // 2))
+
+    # screen
+    d.rounded_rectangle(r(160, 260, 864, 700), radius=r(56)[0],
+                        fill=SCREEN, outline=SCREEN_EDGE, width=max(1, r(16)[0]))
+    # programme bars (guide rows) — Now & Next
+    d.rounded_rectangle(r(216, 316, 560, 392), radius=r(20)[0], fill=BAR)
+    d.rounded_rectangle(r(216, 448, 424, 524), radius=r(20)[0], fill=BAR_DIM)
+    # the now line — overshoots the screen top and bottom
+    d.rounded_rectangle(r(640, 212, 670, 748), radius=r(15)[0], fill=RED)
+    # TV stand
+    d.rounded_rectangle(r(432, 748, 592, 800), radius=r(18)[0], fill=STAND)
+    return img
+
+
+def rounded(img: Image.Image, radius_pct: float) -> Image.Image:
+    """Knock transparent rounded corners into a full-bleed square."""
+    px = img.width
+    mask = Image.new("L", (px, px), 0)
+    ImageDraw.Draw(mask).rounded_rectangle(
+        [0, 0, px - 1, px - 1], radius=int(px * radius_pct), fill=255)
+    img = img.copy()
+    img.putalpha(mask)
+    return img
+
+
+def write(img: Image.Image, name: str) -> None:
     OUT.mkdir(exist_ok=True)
     img.save(OUT / name)
-    print(f"wrote icons/{name} ({px}x{px})")
+    print(f"wrote icons/{name} ({img.width}x{img.height})")
+
+
+def icon(px: int, name: str, *, radius_pct: float = 0.0, glyph: float = 1.0) -> None:
+    img = draw_master(px * SS, glyph).resize((px, px), Image.LANCZOS)
+    if radius_pct:
+        img = rounded(img, radius_pct)
+    write(img, name)
 
 
 if __name__ == "__main__":
-    icon(192, "icon-192.png")
-    icon(512, "icon-512.png")
-    icon(512, "icon-maskable-512.png", radius=0, glyph_pct=0.5, full_bleed=True)
-    icon(180, "apple-touch-icon.png", radius=0, glyph_pct=0.62, full_bleed=True)
+    icon(192, "icon-192.png", radius_pct=0.20)
+    icon(512, "icon-512.png", radius_pct=0.20)
+    icon(512, "icon-maskable-512.png", glyph=0.85)  # keeps content in the 80% safe zone
+    icon(180, "apple-touch-icon.png")               # iOS applies its own mask

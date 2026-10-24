@@ -77,7 +77,7 @@ node tools/smoke.mjs       # headless end-to-end test against system Chromium
 node tools/test-time.mjs   # DST/timezone unit tests
 node tools/mobile-test.mjs # headless mobile-layout checks
 node tools/banner-test.mjs # headless install-banner behaviour checks
-python3 tools/make-icons.py  # regenerate icons/ PNGs (needs Pillow + Noto Color Emoji)
+python3 tools/make-icons.py  # regenerate icons/ PNGs (needs Pillow)
 ```
 
 ## Project layout
