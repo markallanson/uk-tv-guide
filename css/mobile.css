@@ -53,7 +53,10 @@
 /* ------------------------------------------------------- phones & small tablets */
 
 @media (max-width: 760px) {
-  :root { --ch-w: 118px; }  /* js/guide.js reads this var — keep it a length */
+  :root { --ch-w: 152px; }  /* js/guide.js reads this var — keep it a length */
+  .ch-cell { padding: 0 4px 0 6px; gap: 4px; }
+  .ch-cell .gdot { display: none; } /* decorative — spend the px on the name */
+  .ch-name { font-size: 12px; }
 
   .install-banner {
     padding: 8px 10px;
@@ -188,7 +191,7 @@
 /* --------------------------------------------------------- very small phones */
 
 @media (max-width: 380px) {
-  :root { --ch-w: 104px; }
+  :root { --ch-w: 126px; }
   .btn { padding: 9px 10px; }
   .day-tab { padding: 9px 11px; }
   .seg-btn { padding: 9px 9px; }

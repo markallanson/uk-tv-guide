@@ -37,7 +37,7 @@ const widths = await page.evaluate(async () => {
   const midnightTick = document.querySelector('.day-mark');
   return { cssVar: cs, cellW: Math.round(cell), tickX: Math.round(midnightTick.getBoundingClientRect().x) };
 });
-check('CSS var & channel cell agree', widths.cssVar === '118px' && widths.cellW === 118, JSON.stringify(widths));
+check('CSS var & channel cell agree', widths.cssVar === '152px' && widths.cellW === 152, JSON.stringify(widths));
 check('JS positions ticks after column', Math.abs(widths.tickX - widths.cellW) <= 12, `day-mark at ${widths.tickX}px`);
 
 // 3. search input 16px (iOS zoom prevention)
@@ -101,7 +101,7 @@ const tiny = await page.evaluate(async () => {
   const tick = document.querySelector('.day-mark');
   return { cssVar: cs, cellW: cell ? Math.round(cell) : 0, tickX: tick ? Math.round(tick.getBoundingClientRect().x) : -1 };
 });
-check('360px tier synced', tiny.cssVar === '104px' && tiny.cellW === 104 && Math.abs(tiny.tickX - 104) <= 12, JSON.stringify(tiny));
+check('360px tier synced', tiny.cssVar === '126px' && tiny.cellW === 126 && Math.abs(tiny.tickX - 126) <= 12, JSON.stringify(tiny));
 
 check('no console errors', errors.length === 0, errors.slice(0, 3).join(' | '));
 

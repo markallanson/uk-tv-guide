@@ -103,7 +103,7 @@ Mobile styles live in `css/mobile.css`: 40px+ touch targets, full-width swipeabl
 day tabs, single-column Now & Next, modals that slide up as bottom sheets with
 notch-safe padding, no sticky hover states, and an iOS-safe 16px search input.
 The guide grid's channel-column width is driven by the `--ch-w` CSS variable at
-breakpoints 760px (118px) and 380px (104px). Verify with `node tools/mobile-test.mjs`.
+breakpoints 760px (152px) and 380px (126px). Verify with `node tools/mobile-test.mjs`.
 
 ## Notes
 

@@ -3,7 +3,7 @@
  * Caches the static shell so the guide works fully offline after first visit.
  * EPG data (epg.pw) is left to the page's own Cache API logic in js/epg.js.
  */
-const SHELL = 'tvg-shell-v2';
+const SHELL = 'tvg-shell-v3';
 const ASSETS = [
   './',
   './index.html',

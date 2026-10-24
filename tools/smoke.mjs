@@ -147,7 +147,7 @@ const mob = await page.evaluate(() => ({
   chW: Math.round(document.querySelector('.ch-cell').getBoundingClientRect().width),
   progs: document.querySelectorAll('.prog').length,
 }));
-check('mobile channel column narrows', mob.chW === 118, String(mob.chW));
+check('mobile channel column narrows', mob.chW === 152, String(mob.chW));
 check('mobile programmes render', mob.progs > 20, String(mob.progs));
 
 check('no console errors', errors.length === 0, errors.slice(0, 5).join(' | '));
