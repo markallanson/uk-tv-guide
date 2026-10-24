@@ -1,5 +1,7 @@
 # 📺 UK TV Guide
 
+**Live:** <https://uk-tv-guide.allanson.org> — deploy status: [![Deploy](https://github.com/markallanson/uk-tv-guide/actions/workflows/deploy.yml/badge.svg)](https://github.com/markallanson/uk-tv-guide/actions/workflows/deploy.yml)
+
 A fast, free UK TV guide that **runs entirely in your browser**. No backend, no build
 step, no API keys — just static files and a free, CORS-enabled EPG API.
 
