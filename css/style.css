@@ -48,6 +48,39 @@ button:focus-visible, input:focus-visible, a:focus-visible {
 a { color: var(--focus); text-decoration: none; }
 .dim { color: var(--text-dim); }
 
+/* ----------------------------------------------------- install banner */
+
+.install-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  color: var(--text-dim);
+}
+.install-banner[hidden] { display: none; }
+.install-icon { font-size: 20px; line-height: 1; }
+.install-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.install-text strong { color: var(--text); font-weight: 600; font-size: 12px; }
+.install-text span { overflow: hidden; text-overflow: ellipsis; }
+.install-banner .btn { flex: none; }
+.install-dismiss {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: none;
+  color: var(--text-dim);
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.install-dismiss:hover { color: var(--text); background: var(--bg); }
+
 /* ---------------------------------------------------------------- topbar */
 
 .topbar {

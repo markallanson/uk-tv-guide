@@ -8,10 +8,23 @@
   <meta name="description" content="Fast, free UK TV guide. 400+ channels, 8 days of listings, search, favourites and now/next — runs entirely in your browser.">
   <title>UK TV Guide</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📺</text></svg>">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/mobile.css">
 </head>
 <body>
+
+  <div id="installBanner" class="install-banner" hidden>
+    <span class="install-icon" aria-hidden="true">📺</span>
+    <div class="install-text">
+      <strong>Add UK TV Guide to your home screen</strong>
+      <span id="installHint">One tap to open, full screen, works offline.</span>
+    </div>
+    <button id="btnInstall" class="btn accent" hidden>Install</button>
+    <button id="btnInstallNo" class="install-dismiss" aria-label="Not now">✕</button>
+  </div>
 
   <header class="topbar">
     <div class="brand"><span class="brand-icon" aria-hidden="true">📺</span><span class="brand-text">UK TV Guide</span></div>

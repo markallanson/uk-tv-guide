@@ -563,3 +563,86 @@ setInterval(() => {
     else renderNowNext();
   }
 }, 60e3);
+
+/* ----------------------------------------------------- install banner */
+// Suggest adding the guide to the phone home screen. Dismissing hides it for
+// 6 months (localStorage); installing hides it for good. Desktop never sees it.
+
+const SIX_MONTHS_MS = 6 * 30 * 86400e3;
+const LS_BANNER = {
+  installed: 'tvg.installBanner.installed',
+  optOut: 'tvg.installBanner.optOutAt',
+};
+const banner = $('#installBanner');
+const btnInstall = $('#btnInstall');
+const installHint = $('#installHint');
+let installPrompt = null;
+
+const isStandalone = () =>
+  matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+const isPhone = () =>
+  matchMedia('(hover: none) and (pointer: coarse)').matches && innerWidth <= 760;
+const isIOS = () =>
+  /iphone|ipod/i.test(navigator.userAgent) ||
+  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); // iPadOS
+
+function showInstallBanner() {
+  if (!banner.hidden) return;
+  if (!isPhone() || isStandalone()) return;
+  if (store.get(LS_BANNER.installed, false)) return;
+  if (Date.now() - (store.get(LS_BANNER.optOut, 0) || 0) < SIX_MONTHS_MS) return;
+
+  // iOS Safari fires beforeinstallprompt as a placeholder but never implements
+  // prompt() — always send iPhones down the manual-instructions path.
+  if (installPrompt && !isIOS()) {
+    installHint.textContent = 'One tap to install — full screen, works offline.';
+    btnInstall.hidden = false;
+  } else if (isIOS()) {
+    installHint.textContent = 'In Safari: Share ⇧ → “Add to Home Screen”.';
+  } else {
+    installHint.textContent = 'From your browser menu, choose “Add to Home screen”.';
+  }
+  banner.hidden = false;
+}
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  installPrompt = e;
+  if (!banner.hidden && !isIOS()) {
+    // banner already showing via the fallback path — upgrade it to the native flow
+    installHint.textContent = 'One tap to install — full screen, works offline.';
+    btnInstall.hidden = false;
+  } else {
+    showInstallBanner();
+  }
+});
+window.addEventListener('appinstalled', () => {
+  store.set(LS_BANNER.installed, true);
+  banner.hidden = true;
+});
+
+$('#btnInstallNo').addEventListener('click', () => {
+  store.set(LS_BANNER.optOut, Date.now());
+  banner.hidden = true;
+});
+btnInstall.addEventListener('click', async () => {
+  if (!installPrompt) return;
+  const ev = installPrompt;
+  installPrompt = null;
+  try {
+    await ev.prompt();
+    const { outcome } = await ev.userChoice;
+    if (outcome === 'accepted') store.set(LS_BANNER.installed, true);
+    banner.hidden = true;
+  } catch {
+    // prompt() rejected — stale or placeholder event (e.g. iOS): swap the dead
+    // button for the manual steps rather than failing silently.
+    btnInstall.hidden = true;
+    installHint.textContent = isIOS()
+      ? 'In Safari: Share ⇧ → “Add to Home Screen”.'
+      : 'From your browser menu, choose “Add to Home screen”.';
+  }
+});
+
+// let the guide paint first, then nudge
+setTimeout(showInstallBanner, 1200);

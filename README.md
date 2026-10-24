@@ -20,6 +20,8 @@ step, no API keys — just static files and a free, CORS-enabled EPG API.
   searches for the programme, plus JustWatch
 - **Zoom** the timeline in/out; sticky time header and channel column
 - **Works offline** after first visit (service worker + Cache API)
+- **Installable** — add it to your phone home screen (manifest + icons; a banner
+  offers this on phones, and stays dismissed for 6 months if you decline)
 - **Keyboard shortcuts** — see below
 - Dark, dense, mobile-friendly design with zero external dependencies (no CDN,
   no fonts, no trackers)
@@ -73,20 +75,26 @@ npm install                # pulls puppeteer-core for the smoke test (optional)
 python3 -m http.server 8123 &
 node tools/smoke.mjs       # headless end-to-end test against system Chromium
 node tools/test-time.mjs   # DST/timezone unit tests
+node tools/mobile-test.mjs # headless mobile-layout checks
+node tools/banner-test.mjs # headless install-banner behaviour checks
+python3 tools/make-icons.py  # regenerate icons/ PNGs (needs Pillow + Noto Color Emoji)
 ```
 
 ## Project layout
 
 ```
 index.html          app shell
+manifest.webmanifest  PWA manifest (installable, home-screen icon)
+icons/              generated PWA/home-screen icons (tools/make-icons.py)
 css/style.css       base styling (dark theme, desktop)
 css/mobile.css      phones/small tablets (touch targets, bottom sheets, safe areas)
 js/channels.js      generated channel list (id, name, group)
 js/epg.js           data layer: epg.pw client, caching, London-time helpers
 js/guide.js         virtualised guide grid renderer (reads --ch-w from CSS)
-js/app.js           app logic: tabs, search, modals, Now & Next, shortcuts
+js/app.js           app logic: tabs, search, modals, Now & Next, shortcuts,
+                    install banner
 sw.js               service worker (offline app shell)
-tools/              channel builder + tests
+tools/              channel builder, icon builder + tests
 ```
 
 ## Mobile

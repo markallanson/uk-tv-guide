@@ -3,15 +3,21 @@
  * Caches the static shell so the guide works fully offline after first visit.
  * EPG data (epg.pw) is left to the page's own Cache API logic in js/epg.js.
  */
-const SHELL = 'tvg-shell-v1';
+const SHELL = 'tvg-shell-v2';
 const ASSETS = [
   './',
   './index.html',
+  './manifest.webmanifest',
   './css/style.css',
+  './css/mobile.css',
   './js/app.js',
   './js/epg.js',
   './js/guide.js',
   './js/channels.js',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
+  './icons/icon-maskable-512.png',
+  './icons/apple-touch-icon.png',
 ];
 
 self.addEventListener('install', (e) => {
