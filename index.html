@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0f1216">
+  <meta name="description" content="Fast, free UK TV guide. 400+ channels, 8 days of listings, search, favourites and now/next — runs entirely in your browser.">
+  <title>UK TV Guide</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📺</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand"><span class="brand-icon" aria-hidden="true">📺</span><span class="brand-text">UK TV Guide</span></div>
+
+    <nav class="day-tabs" id="dayTabs" aria-label="Choose day"></nav>
+
+    <div class="tools">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.4" d="M21 21l-4.8-4.8M17 10.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/></svg>
+        <input id="searchBox" type="search" placeholder="Search programmes…" autocomplete="off" spellcheck="false" aria-label="Search programmes">
+        <div id="searchResults" class="search-results" hidden></div>
+      </div>
+
+      <button id="btnNow" class="btn accent" title="Jump to now (N)">Now</button>
+
+      <div class="seg" role="tablist" aria-label="View">
+        <button id="btnGuideView" class="seg-btn on" role="tab" aria-selected="true">Guide</button>
+        <button id="btnNowNextView" class="seg-btn" role="tab" aria-selected="false">Now&nbsp;&amp;&nbsp;Next</button>
+      </div>
+
+      <button id="btnFavs" class="btn icon" title="Show favourites only (F)" aria-pressed="false">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 17.3l-6.2 3.7 1.6-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.4 4.8 1.6 7z"/></svg>
+      </button>
+
+      <button id="btnChannels" class="btn" title="Choose channels">
+        <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg>
+        <span class="btn-label">Channels</span>
+      </button>
+
+      <div class="zoom" role="group" aria-label="Zoom">
+        <button id="zoomOut" class="btn icon" title="Zoom out (−)"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M5 11h14v2H5z"/></svg></button>
+        <button id="zoomIn" class="btn icon" title="Zoom in (+)"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="guideView" class="guide" aria-label="TV guide grid">
+      <div class="guide-scroller">
+        <div class="guide-inner">
+          <div class="time-header"><div class="th-corner"><span class="th-label">Channel</span></div></div>
+          <div class="rows-layer"></div>
+          <div class="now-line" title="Now"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="nowView" class="now-view" hidden aria-label="Now and next"></section>
+  </main>
+
+  <footer class="statusbar">
+    <span id="statusText">Loading channels…</span>
+    <span class="keys-hint">←/→ time &nbsp;·&nbsp; N now &nbsp;·&nbsp; / search &nbsp;·&nbsp; F favourites</span>
+  </footer>
+
+  <div id="loading" class="loading-overlay" role="status">
+    <div class="loading-card">
+      <div class="tv-bounce"><span></span><span></span><span></span></div>
+      <h1>UK TV Guide</h1>
+      <p id="loadingText">Fetching tonight's telly…</p>
+      <div class="loading-bar"><div id="loadingFill"></div></div>
+    </div>
+  </div>
+
+  <div id="detailsModal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="detailsTitle"></div>
+  <div id="channelsModal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="channelsModalTitle"></div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

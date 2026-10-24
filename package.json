@@ -1,0 +1,10 @@
+{
+  "name": "uk-tv-guide",
+  "version": "1.0.0",
+  "description": "Browser-only UK TV guide powered by the free epg.pw API",
+  "type": "module",
+  "devDependencies": {
+    "puppeteer-core": "^25.16.0"
+  },
+  "private": true
+}

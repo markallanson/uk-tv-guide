@@ -68,7 +68,7 @@ export function londonTime(ms) {
 
 /* ----------------------------------------------------------------- cache */
 
-const cKey = (id, date) => `tvg-cache://epg/${id}/${date}`;
+const cKey = (id, date) => `${API}?channel_id=${id}&date=${date}`; // real URL — Cache API requires http(s)
 
 async function readCache(id, date) {
   const c = await cacheReady;
