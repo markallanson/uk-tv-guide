@@ -31,7 +31,7 @@ export class Guide {
     this.pxPerMin = 2.2;
     this.t0 = londonDayStart(londonDateKey());           // timeline start (ms)
     this.t1 = this.t0 + DAYS * 24 * HOUR;                // timeline end (ms)
-    this.chColW = matchMedia('(max-width: 760px)').matches ? 118 : 208;
+    this.chColW = 208;
 
     this.rowEls = new Map();      // index -> element
     this.dirtyRows = new Set();
@@ -51,8 +51,14 @@ export class Guide {
 
   /* ------------------------------------------------------------ layout */
 
+  /** Channel-column width comes from the CSS var --ch-w (mobile.css tunes it). */
+  readChannelColWidth() {
+    const v = parseFloat(getComputedStyle(this.root).getPropertyValue('--ch-w'));
+    return Number.isFinite(v) && v >= 80 ? v : 208;
+  }
+
   layout() {
-    this.chColW = matchMedia('(max-width: 760px)').matches ? 118 : 208;
+    this.chColW = this.readChannelColWidth();
     this.timelineW = (this.t1 - this.t0) / 60000 * this.pxPerMin;
     this.n = this.opts.getChannels().length;
     this.inner.style.width = `${this.timelineW + this.chColW}px`;

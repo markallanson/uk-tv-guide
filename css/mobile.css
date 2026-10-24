@@ -1,0 +1,192 @@
+/**
+ * mobile.css — phones & small tablets. Loaded after style.css.
+ *
+ * Owns the mobile presentation completely:
+ *  - layout: wrapped topbar, full-width search, single-column Now & Next
+ *  - touch: 40px+ targets, tap feedback instead of hover, no text selection
+ *  - modals become bottom sheets with safe-area padding
+ *  - the channel-column width (--ch-w) is defined here and read by js/guide.js
+ */
+
+/* ------------------------------------------------- touch ergonomics (any width) */
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.guide,
+.guide-scroller {
+  -webkit-user-select: none;
+  user-select: none;           /* long-press scroll shouldn't select text */
+  overscroll-behavior: contain; /* don't chain scrolls / pull-to-refresh */
+  -webkit-overflow-scrolling: touch;
+}
+
+.d-desc,
+.modal-card,
+.search-results {
+  -webkit-user-select: text;    /* but keep text selectable where it matters */
+  user-select: text;
+}
+
+/* hover effects only on devices that actually hover */
+@media (hover: none) {
+  .prog:hover { filter: none; }
+  .prog:active { filter: brightness(1.35); }
+  .btn:hover { background: var(--surface-2); }
+  .btn.accent:hover { background: var(--accent); }
+  .day-tab:hover { background: transparent; color: var(--text-dim); }
+  .sr-item:hover { background: transparent; }
+  .sr-item.sel { background: var(--surface-2); }
+  .nn-card:hover { background: var(--surface); border-color: var(--border); }
+  .cm-item:hover { background: transparent; }
+  .cm-mini:hover { color: var(--text-dim); background: none; }
+  .modal-close:hover { color: var(--text-dim); background: none; }
+  .star:hover { color: inherit; background: none; }
+
+  .btn:active { transform: scale(0.96); }
+  .day-tab:active { background: var(--surface-2); color: var(--text); }
+  .nn-card:active { background: var(--surface-2); border-color: #32405a; }
+  .prog:active { z-index: 2; }
+}
+
+/* ------------------------------------------------------- phones & small tablets */
+
+@media (max-width: 760px) {
+  :root { --ch-w: 118px; }  /* js/guide.js reads this var — keep it a length */
+
+  .topbar {
+    gap: 6px 8px;
+    padding: 6px 10px;
+    padding-top: calc(6px + env(safe-area-inset-top, 0px));
+  }
+  .brand { font-size: 15px; }
+  .brand-text { display: none; }
+
+  /* row 2: day tabs get their own full-width, swipeable strip */
+  .day-tabs {
+    order: 2;
+    width: 100%;
+    margin-top: 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .day-tab {
+    padding: 9px 14px;
+    font-size: 13px;
+    min-height: 38px;
+  }
+
+  /* row 3+: tools; search claims a full row first, buttons share the next */
+  .tools {
+    order: 3;
+    width: 100%;
+    gap: 6px;
+    margin: 2px 0 0;
+  }
+  .search-wrap {
+    order: -1;
+    flex: 1 1 100%;
+  }
+  #searchBox {
+    width: 100%;
+    min-height: 42px;
+    font-size: 16px;           /* 16px stops iOS Safari zooming on focus */
+  }
+  .search-results {
+    left: 0;
+    right: 0;
+    min-width: 0;
+    max-height: 55dvh;
+  }
+
+  /* 40px+ touch targets everywhere */
+  .btn { min-height: 42px; padding: 9px 13px; }
+  .btn.icon { min-width: 42px; padding: 9px 11px; }
+  .btn-label { display: none; }
+  .seg-btn { min-height: 42px; }
+
+  /* guide density */
+  .ch-name { font-size: 11.5px; }
+  .star { padding: 13px; }
+  .prog .p-time { font-size: 10px; }
+  .prog .p-title { font-size: 12px; }
+  .th-label { display: none; }
+  .time-header .tick { font-size: 11px; }
+
+  /* now & next: comfortable single column */
+  .now-view {
+    padding: 10px;
+    gap: 8px;
+    grid-template-columns: 1fr;
+  }
+  .nn-card { padding: 13px 14px; }
+  .nn-title { font-size: 16px; }
+
+  .statusbar {
+    padding-bottom: calc(5px + env(safe-area-inset-bottom, 0px));
+  }
+  .keys-hint { display: none; }
+
+  /* modals become bottom sheets */
+  .modal {
+    align-items: end;
+    justify-items: stretch;
+    padding: 0;
+  }
+  .modal-card {
+    width: 100%;
+    max-width: none;
+    max-height: 86dvh;
+    border-radius: 18px 18px 0 0;
+    border-bottom: 0;
+    padding: 20px 18px calc(20px + env(safe-area-inset-bottom, 0px));
+    animation: sheet-up 0.22s ease-out;
+  }
+  .modal-card::before {          /* grab handle affordance */
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    width: 42px;
+    height: 4px;
+    border-radius: 4px;
+    background: #3a4254;
+  }
+  .modal-card .modal-close {
+    top: 18px;
+    right: 10px;
+    padding: 10px 14px;
+    font-size: 24px;
+  }
+  #detailsTitle { font-size: 19px; padding-right: 30px; }
+
+  .d-actions {
+    flex-direction: column;
+  }
+  .d-actions .btn { justify-content: center; }
+
+  .cm-list { grid-template-columns: 1fr; }
+  .cm-footer {
+    position: sticky;
+    bottom: 0;
+    margin: 14px -18px calc(-20px - env(safe-area-inset-bottom, 0px));
+    padding: 12px 18px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    border-radius: 0;
+  }
+  .cm-footer #cmReset { margin-right: auto; }
+}
+
+/* --------------------------------------------------------- very small phones */
+
+@media (max-width: 380px) {
+  :root { --ch-w: 104px; }
+  .btn { padding: 9px 10px; }
+  .day-tab { padding: 9px 11px; }
+  .seg-btn { padding: 9px 9px; }
+}
+
+@keyframes sheet-up {
+  from { transform: translateY(48px); opacity: 0; }
+}

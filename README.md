@@ -77,14 +77,23 @@ node tools/test-time.mjs   # DST/timezone unit tests
 
 ```
 index.html          app shell
-css/style.css       all styling (dark theme, responsive)
+css/style.css       base styling (dark theme, desktop)
+css/mobile.css      phones/small tablets (touch targets, bottom sheets, safe areas)
 js/channels.js      generated channel list (id, name, group)
 js/epg.js           data layer: epg.pw client, caching, London-time helpers
-js/guide.js         virtualised guide grid renderer
+js/guide.js         virtualised guide grid renderer (reads --ch-w from CSS)
 js/app.js           app logic: tabs, search, modals, Now & Next, shortcuts
 sw.js               service worker (offline app shell)
 tools/              channel builder + tests
 ```
+
+## Mobile
+
+Mobile styles live in `css/mobile.css`: 40px+ touch targets, full-width swipeable
+day tabs, single-column Now & Next, modals that slide up as bottom sheets with
+notch-safe padding, no sticky hover states, and an iOS-safe 16px search input.
+The guide grid's channel-column width is driven by the `--ch-w` CSS variable at
+breakpoints 760px (118px) and 380px (104px). Verify with `node tools/mobile-test.mjs`.
 
 ## Notes
 

@@ -37,7 +37,7 @@ html, body {
   overscroll-behavior: none;
 }
 
-body { display: flex; flex-direction: column; height: 100dvh; }
+body { display: flex; flex-direction: column; height: 100vh; height: 100dvh; }
 
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
 button:focus-visible, input:focus-visible, a:focus-visible {
@@ -718,20 +718,9 @@ main { position: relative; flex: 1; min-height: 0; }
 
 /* -------------------------------------------------------------- responsive */
 
-@media (max-width: 760px) {
-  :root { --ch-w: 118px; }
-  .brand-text { display: none; }
-  .tools { width: 100%; order: 3; }
-  .day-tabs { order: 2; width: 100%; }
-  #searchBox { width: 100%; }
-  .search-wrap { flex: 1 1 100%; }
-  .search-results { left: 0; right: 0; min-width: 0; }
-  .keys-hint { display: none; }
-  .ch-name { font-size: 11.5px; }
-  .btn-label { display: none; }
-}
-
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: 0.01s !important; transition-duration: 0.01s !important; }
   .guide-scroller { scroll-behavior: auto; }
 }
+
+/* Mobile styles live in css/mobile.css (loaded after this file). */
