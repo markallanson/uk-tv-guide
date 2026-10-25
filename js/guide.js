@@ -5,7 +5,7 @@
  * programme blocks are clipped to the visible time window horizontally.
  * The time header and channel column are sticky inside one scroll container.
  */
-import { londonDayStart, londonDateKey, londonTime } from './epg.js';
+import { londonDayStart, londonDateKey, londonTime, addDays } from './epg.js';
 
 export const DAYS = 8;
 export const ROW_H = 64;
@@ -30,7 +30,7 @@ export class Guide {
 
     this.pxPerMin = 2.2;
     this.t0 = londonDayStart(londonDateKey());           // timeline start (ms)
-    this.t1 = this.t0 + DAYS * 24 * HOUR;                // timeline end (ms)
+    this.t1 = londonDayStart(addDays(londonDateKey(this.t0), DAYS)); // 8 London days (23/25h ones included)
     this.chColW = 208;
 
     this.rowEls = new Map();      // index -> element
@@ -111,7 +111,8 @@ export class Guide {
       tick.style.left = `${(t - this.t0) / 60000 * this.pxPerMin + this.chColW}px`;
       frag.appendChild(tick);
     }
-    for (let t = this.t0; t < this.t1; t += 24 * HOUR) {
+    for (let k = londonDateKey(this.t0), t = this.t0; t < this.t1;
+         k = addDays(k, 1), t = londonDayStart(k)) {
       const d = new Date(t);
       const label = new Intl.DateTimeFormat('en-GB', {
         timeZone: 'Europe/London', weekday: 'short', day: 'numeric', month: 'short',

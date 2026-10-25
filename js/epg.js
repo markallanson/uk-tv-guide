@@ -31,6 +31,14 @@ export function londonDateKey(ms = Date.now()) {
   return londonFmt.format(new Date(ms));
 }
 
+/** dateKey n calendar days later. DST-safe: pure UTC date arithmetic —
+ *  never do `londonDayStart(k) + n * 24h`, London days are 23/25h long
+ *  twice a year (the guide generated a duplicate "Tomorrow" on those days). */
+export function addDays(dateKey, n) {
+  return new Date(Date.parse(dateKey + 'T00:00:00Z') + n * 86400e3)
+    .toISOString().slice(0, 10);
+}
+
 function londonWallParts(ms) {
   const parts = new Intl.DateTimeFormat('en-GB', {
     timeZone: 'Europe/London', year: 'numeric', month: '2-digit', day: '2-digit',

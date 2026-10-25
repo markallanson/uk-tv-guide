@@ -116,9 +116,7 @@ const setStatus = (t) => { $('#statusText').textContent = t; };
 /* ------------------------------------------------------------ day tabs */
 
 function dayKeys() {
-  const start = epg.londonDayStart(todayKey);
-  return Array.from({ length: DAYS }, (_, i) =>
-    epg.londonDateKey(start + i * 24 * HOUR));
+  return Array.from({ length: DAYS }, (_, i) => epg.addDays(todayKey, i));
 }
 
 function buildTabs() {
@@ -141,7 +139,7 @@ function selectDay(key, { scroll = true } = {}) {
   currentDayKey = key;
   buildTabs();
   setView('guide');
-  ensureDays([key, epg.londonDateKey(epg.londonDayStart(key) + 24 * HOUR)]);
+  ensureDays([key, epg.addDays(key, 1)]);
   if (scroll) {
     const start = epg.londonDayStart(key) + 6 * HOUR; // guides start at 6am
     const dist = Math.abs(start - guide.tAtLeft);
@@ -500,7 +498,7 @@ $('#btnNow').addEventListener('click', () => {
   currentDayKey = todayKey;
   buildTabs();
   setView('guide');
-  ensureDays([todayKey, epg.londonDateKey(epg.londonDayStart(todayKey) + 24 * HOUR)]);
+  ensureDays([todayKey, epg.addDays(todayKey, 1)]);
   guide.scrollToTime(Date.now() - 20 * 60e3);
 });
 
@@ -558,7 +556,7 @@ setInterval(() => {
     loadedDays.delete(key);
     currentDayKey = key;
     buildTabs();
-    ensureDays([key, epg.londonDateKey(epg.londonDayStart(key) + 24 * HOUR)]);
+    ensureDays([key, epg.addDays(key, 1)]);
     if (viewMode === 'guide') guide.layout();
     else renderNowNext();
   }
