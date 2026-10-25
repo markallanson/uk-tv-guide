@@ -24,7 +24,7 @@ step, no API keys — just static files and a free, CORS-enabled EPG API.
   offers this on phones, and stays dismissed for 6 months if you decline)
 - **Keyboard shortcuts** — see below
 - Dark, dense, mobile-friendly design with zero external dependencies (no CDN,
-  no fonts, no trackers)
+  no fonts; page-view stats only, via [GoatCounter](https://markallanson.goatcounter.com))
 
 ## Run it
 
